@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ia.ecomp.uefs.br</groupId>
-    <artifactId>problema1</artifactId>
+    <groupId>br.uefs.ecomp.ia</groupId>
+    <artifactId>sentiment_analysis</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
@@ -35,4 +35,5 @@
             <version>2.94</version>
         </dependency>
     </dependencies>
+    <name>Sentiment Analysis</name>
 </project>
