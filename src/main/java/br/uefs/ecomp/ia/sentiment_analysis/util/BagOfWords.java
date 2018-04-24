@@ -43,7 +43,7 @@ public class BagOfWords {
 				if (!vocabullary.contains(w))
 					vocabullary.add(w);
 		}
-		System.out.println("Tabamho do vocabulário: " + vocabullary.size());
+		System.out.println("Tamanho do vocabulÃ¡rio: " + vocabullary.size());
 	}
 
 	public int[] createVec(String line) {
@@ -81,7 +81,7 @@ public class BagOfWords {
 		t = Normalizer.normalize(t, Normalizer.Form.NFD);
 		t = t.replaceAll("[^\\p{ASCII}]", ""); // Remove qualquer coisa fora da ascii
 		t = t.replaceAll("[\\p{InCombiningDiacriticalMarks}]", ""); // Remove qualquer coisa fora da ascii
-		t = t.replaceAll("\\d", ""); // Remove números
+		t = t.replaceAll("\\d", ""); // Remove nÃºï¿½meros
 		t = t.replaceAll("\\s+", " ");
 		t = t.trim();
 		return t;

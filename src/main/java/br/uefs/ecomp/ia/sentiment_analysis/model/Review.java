@@ -3,13 +3,13 @@ package br.uefs.ecomp.ia.sentiment_analysis.model;
 public class Review {
 
 	private int stars;
-	private String tile;
+	private String title;
 	private String comment;
 	private int[] vector;
 
-	public Review(int stars, String tile, String comment) {
+	public Review(int stars, String title, String comment) {
 		this.stars = stars;
-		this.tile = tile;
+		this.title = title;
 		this.comment = comment;
 	}
 
@@ -22,11 +22,11 @@ public class Review {
 	}
 
 	public String getTitle() {
-		return tile;
+		return title;
 	}
 
 	public void setTitle(String title) {
-		this.tile = title;
+		this.title = title;
 	}
 
 	public String getComment() {
@@ -51,5 +51,10 @@ public class Review {
 
 	public boolean isPositive() {
 		return stars > 3;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%d;%s;%s", stars, title, comment);
 	}
 }

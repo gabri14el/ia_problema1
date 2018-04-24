@@ -13,6 +13,7 @@ public class App {
 
 	public static String STOP_WORDS_FILE = "files/stopwords.txt";
 	public static String INPUT_FILE = "files/input.csv";
+	public static String COMMENTS_FILE = "files/comments.csv";
 
 	public static void main(String[] args) throws IOException {
 		List<String> stopWords = loadStopWords();
