@@ -80,10 +80,21 @@ public class BagOfWords {
 	private String clean(String t) {
 		t = Normalizer.normalize(t, Normalizer.Form.NFD);
 		t = t.replaceAll("[^\\p{ASCII}]", ""); // Remove qualquer coisa fora da ascii
-		t = t.replaceAll("[\\p{InCombiningDiacriticalMarks}]", ""); // Remove qualquer coisa fora da ascii
-		t = t.replaceAll("\\d", ""); // Remove nú�meros
+		t = t.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+		t = t.replaceAll("\\d", ""); // Remove números
 		t = t.replaceAll("\\s+", " ");
+		t = removeDoubleChars(t);
 		t = t.trim();
+
+		return t;
+	}
+
+	private String removeDoubleChars(String t) {
+		t = t.replaceAll("[a]+", "a");
+		t = t.replaceAll("[e]+", "e");
+		t = t.replaceAll("[i]+", "i");
+		t = t.replaceAll("[o]+", "o");
+		t = t.replaceAll("[u]+", "u");
 		return t;
 	}
 }

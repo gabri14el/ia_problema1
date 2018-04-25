@@ -12,7 +12,9 @@ import br.uefs.ecomp.ia.sentiment_analysis.util.BagOfWords;
 public class App {
 
 	public static String STOP_WORDS_FILE = "files/stopwords.txt";
-	public static String INPUT_FILE = "files/input.csv";
+	public static String INPUT_TRAINNING_FILE = "files/input_trainning.csv";
+	public static String INPUT_VALIDATION_FILE = "files/input_validation.csv";
+	public static String INPUT_TEST_FILE = "files/input_test.csv";
 	public static String COMMENTS_FILE = "files/comments.csv";
 
 	public static void main(String[] args) throws IOException {
@@ -20,10 +22,7 @@ public class App {
 		List<Review> reviews = loadReviews();
 		BagOfWords bow = createBOW(stopWords, reviews);
 		createVecReviews(reviews, bow);
-		createNeuralNetwork();
 	}
-
-	private static void createNeuralNetwork() {}
 
 	private static List<String> loadStopWords() throws IOException {
 		List<String> stopWords = new LinkedList<>();
@@ -35,7 +34,7 @@ public class App {
 
 	private static List<Review> loadReviews() throws IOException {
 		List<Review> reviews = new LinkedList<>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(INPUT_FILE), "UTF-8"))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(INPUT_TRAINNING_FILE), "UTF-8"))) {
 			reader.lines().forEach((l) -> {
 				String[] line = l.split(";");
 				reviews.add(new Review(Integer.parseInt(line[0]), line[1], line[2]));
