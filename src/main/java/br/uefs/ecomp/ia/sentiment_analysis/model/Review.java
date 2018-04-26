@@ -5,7 +5,7 @@ public class Review {
 	private int stars;
 	private String title;
 	private String comment;
-	private int[] vector;
+	private double[] vector;
 
 	public Review(int stars, String title, String comment) {
 		this.stars = stars;
@@ -37,11 +37,11 @@ public class Review {
 		this.comment = comment;
 	}
 
-	public int[] getVector() {
+	public double[] getVector() {
 		return vector;
 	}
 
-	public void setVector(int[] vector) {
+	public void setVector(double[] vector) {
 		this.vector = vector;
 	}
 

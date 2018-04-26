@@ -8,6 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import br.uefs.ecomp.ia.sentiment_analysis.model.Review;
 import br.uefs.ecomp.ia.sentiment_analysis.util.BagOfWords;
+import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.data.DataSet;
+import org.neuroph.core.data.DataSetRow;
+import org.neuroph.nnet.Perceptron;
+import org.neuroph.util.TransferFunctionType;
 
 public class App {
 
@@ -24,6 +29,38 @@ public class App {
 		createVecReviews(reviews, bow);
 	}
 
+	/***
+	 * Método responsável por criar a a rede neural perceptron, entradas do tamanho do vocabulario
+	 * e saída de tamanho 1. Função de transferência: sigmoide.
+	 * @param bow bow contendo vocabulario
+	 * @return rede neural do tipo perceptron simples.
+	 */
+	private static NeuralNetwork createSimplePerceptronNN(BagOfWords bow) {
+		NeuralNetwork neuralNetwork = new Perceptron(bow.getVocabullarySize(),1, TransferFunctionType.SIGMOID);
+		return neuralNetwork;
+	}
+
+	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews){
+		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
+		DataSet traingSet = new DataSet(neuralNetwork.getInputsCount(), 1);
+		for (Review r: trainReviews){
+			double[] output;
+			double[] input = r.getVector();
+
+			//para facilitar o trabalho da conversão da sigmoide
+			if(r.isNegative())
+				output=new double[]{0.01};
+			else
+				output=new double[]{0.99};
+
+			//adiciona comentario na base de treinamento
+			traingSet.add(new DataSetRow(input, output));
+		}
+
+		//falta descobrir que tipo de treinamento é esse kkkk, queira a Deus que seja o
+		//supervisionado, amém??
+		neuralNetwork.learn(traingSet);
+	}
 	private static List<String> loadStopWords() throws IOException {
 		List<String> stopWords = new LinkedList<>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(STOP_WORDS_FILE), "UTF-8"))) {
@@ -53,7 +90,7 @@ public class App {
 	}
 
 	private static void createVecReviews(List<Review> reviews, BagOfWords bow) {
-		int[] vec;
+		double[] vec;
 		for (Review r : reviews) {
 			vec = bow.createVec(r.getComment());
 			r.setVector(vec);

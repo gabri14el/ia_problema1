@@ -46,7 +46,7 @@ public class BagOfWords {
 		System.out.println("Tamanho do vocabulário: " + vocabullary.size());
 	}
 
-	public int[] createVec(String line) {
+	public double[] createVec(String line) {
 		String l = clean(line);
 		List<String> words = new LinkedList<>(Arrays.asList(l.split("\\s")));
 		words.removeAll(stopWords);
@@ -56,11 +56,11 @@ public class BagOfWords {
 		else if (type == TERM_FREQUENCY)
 			return createTFVec(words);
 
-		return new int[vocabullary.size()];
+		return new double[vocabullary.size()];
 	}
 
-	private int[] createBinaryVec(List<String> words) {
-		int[] vec = new int[vocabullary.size()];
+	private double[] createBinaryVec(List<String> words) {
+		double[] vec = new double[vocabullary.size()];
 		for (String w : words) {
 			if (vocabullary.contains(w))
 				vec[vocabullary.indexOf(w)] = 1;
@@ -68,8 +68,8 @@ public class BagOfWords {
 		return vec;
 	}
 
-	private int[] createTFVec(List<String> words) {
-		int[] vec = new int[vocabullary.size()];
+	private double[] createTFVec(List<String> words) {
+		double[] vec = new double[vocabullary.size()];
 		for (String w : words) {
 			if (vocabullary.contains(w))
 				vec[vocabullary.indexOf(w)]++;
@@ -96,5 +96,14 @@ public class BagOfWords {
 		t = t.replaceAll("[o]+", "o");
 		t = t.replaceAll("[u]+", "u");
 		return t;
+	}
+
+	/**
+	 *
+	 * Método que retorna tamanho do vocabulário
+	 * @return
+	 */
+	public int getVocabullarySize() {
+		return vocabullary.size();
 	}
 }
