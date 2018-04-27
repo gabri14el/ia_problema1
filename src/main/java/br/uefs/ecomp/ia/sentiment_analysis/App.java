@@ -11,6 +11,7 @@ import br.uefs.ecomp.ia.sentiment_analysis.util.BagOfWords;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
+import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.Perceptron;
 import org.neuroph.util.TransferFunctionType;
 
@@ -27,6 +28,21 @@ public class App {
 		List<Review> reviews = loadReviews();
 		BagOfWords bow = createBOW(stopWords, reviews);
 		createVecReviews(reviews, bow);
+		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize())/2);
+		trainingNeuralNetwork(neuralNetwork, reviews); //TODO substituir por trainingReviews
+	}
+
+	/**
+	 * Cria uma rede neural multicamada.
+	 * @param bow objeto bag of words
+	 * @param hiddenNeurons numero de neuronoios na camada oculta
+	 * @return rede neural
+	 */
+	public static NeuralNetwork createSimpleMultilayerPerceptronNN(BagOfWords bow, int hiddenNeurons){
+		NeuralNetwork neuralNetwork = new MultiLayerPerceptron(TransferFunctionType.SIGMOID,
+				bow.getVocabullarySize(), hiddenNeurons, 1);
+		System.out.println("creating multilayer perceptron...");
+		return neuralNetwork;
 	}
 
 	/***
@@ -40,6 +56,12 @@ public class App {
 		return neuralNetwork;
 	}
 
+	/**
+	 * Treina rede neural com treino padrão,
+	 * na perceptron: backpropagation
+	 * @param neuralNetwork
+	 * @param trainReviews
+	 */
 	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews){
 		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
 		DataSet traingSet = new DataSet(neuralNetwork.getInputsCount(), 1);
@@ -59,6 +81,7 @@ public class App {
 
 		//falta descobrir que tipo de treinamento é esse kkkk, queira a Deus que seja o
 		//supervisionado, amém??
+
 		neuralNetwork.learn(traingSet);
 	}
 	private static List<String> loadStopWords() throws IOException {
