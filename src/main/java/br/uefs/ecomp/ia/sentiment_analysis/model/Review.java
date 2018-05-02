@@ -13,6 +13,11 @@ public class Review {
 		this.comment = comment;
 	}
 
+	public Review(int stars, String comment) {
+		this.stars = stars;
+		this.comment = comment;
+	}
+
 	public int getEstrelas() {
 		return stars;
 	}
