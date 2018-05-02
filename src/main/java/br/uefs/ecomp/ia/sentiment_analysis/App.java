@@ -7,9 +7,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
 import br.uefs.ecomp.ia.sentiment_analysis.model.Review;
 import br.uefs.ecomp.ia.sentiment_analysis.util.BagOfWords;
+import org.neuroph.core.Layer;
 import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.Neuron;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.core.events.LearningEvent;
@@ -88,7 +92,10 @@ public class App {
 		System.out.println("iniciando treinamento da rede neural...");
 		BackPropagation backPropagation = new BackPropagation();
 		backPropagation.setMaxIterations(1000);
-		//backPropagation.setMaxError(0.01);
+
+		//backPropagation.setMaxError(0.01); setar erro maximo
+		//backPropagation.setLearningRate(0.5);	setar taza de aprendizado
+
 		backPropagation.addListener(new LearningEventListener() {
 			@Override
 			public void handleLearningEvent(LearningEvent learningEvent) {
@@ -96,6 +103,10 @@ public class App {
 				if(learningEvent.getEventType().equals(LearningEvent.Type.LEARNING_STOPPED))
 					System.out.println("o erro foi: "+ backPropagation.getTotalNetworkError());
 				//guardar junto os pesos dos neuronios quando alcancar o menor erro
+				else if(learningEvent.getEventType().equals(LearningEvent.Type.EPOCH_ENDED)){
+					//fazer aqui a validação a cada epoca
+					//nao tenho ideia de como fazer mas vida que segue
+				}
 			}
 		});
 		long inicio = System.currentTimeMillis();
@@ -169,5 +180,16 @@ public class App {
 		trainingNeuralNetwork(neuralNetwork, comentarios);
 
 	}
-	
+
+
+	private void initializeNeurons(NeuralNetwork neuralNetwork){
+		Layer hiddenLayer = neuralNetwork.getLayerAt(1);
+		List<Neuron> neurons = hiddenLayer.getNeurons();
+
+		Random random = new Random(100);
+		for(Neuron n: neurons){
+			n.initializeWeights(random.nextInt()/100);
+			System.out.println(n.getWeights());
+		}
+	}
 }
