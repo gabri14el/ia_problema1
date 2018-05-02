@@ -29,13 +29,12 @@ public class App {
 	public static String COMMENTS_FILE = "files/comments.csv";
 
 	public static void main(String[] args) throws IOException {
-		/*List<String> stopWords = loadStopWords();
+		List<String> stopWords = loadStopWords();
 		List<Review> reviews = loadReviews();
 		BagOfWords bow = createBOW(stopWords, reviews);
 		createVecReviews(reviews, bow);
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize())/2);
-		trainingNeuralNetwork(neuralNetwork, reviews); //TODO substituir por trainingReviews*/
-		brincandoComRN();
+		trainingNeuralNetwork(neuralNetwork, reviews); //TODO substituir por trainingReviews
 	}
 
 	/**
@@ -85,22 +84,26 @@ public class App {
 			traingSet.add(new DataSetRow(input, output));
 		}
 
-		//falta descobrir que tipo de treinamento é esse kkkk, queira a Deus que seja o
-		//supervisionado, amém??
+
 		System.out.println("iniciando treinamento da rede neural...");
 		BackPropagation backPropagation = new BackPropagation();
 		backPropagation.setMaxIterations(1000);
+		//backPropagation.setMaxError(0.01);
 		backPropagation.addListener(new LearningEventListener() {
 			@Override
 			public void handleLearningEvent(LearningEvent learningEvent) {
 				System.out.println(learningEvent.getEventType().name());
+				if(learningEvent.getEventType().equals(LearningEvent.Type.LEARNING_STOPPED))
+					System.out.println("o erro foi: "+ backPropagation.getTotalNetworkError());
+				//guardar junto os pesos dos neuronios quando alcancar o menor erro
 			}
 		});
 		long inicio = System.currentTimeMillis();
-		neuralNetwork.learn(traingSet, new BackPropagation());
+		neuralNetwork.learn(traingSet, backPropagation);
 		long fim = System.currentTimeMillis();
 
 		System.out.println("treinamento terminado em :" + (fim-inicio)/1000 + "segundos");
+
 	}
 	private static List<String> loadStopWords() throws IOException {
 		List<String> stopWords = new LinkedList<>();
@@ -131,6 +134,7 @@ public class App {
 	}
 
 	private static void createVecReviews(List<Review> reviews, BagOfWords bow) {
+		System.out.println("criando vetores para os comentarios...");
 		double[] vec;
 		for (Review r : reviews) {
 			vec = bow.createVec(r.getComment());
@@ -138,6 +142,11 @@ public class App {
 		}
 	}
 
+
+	/**
+	 * Método temporário so pra testar as brincadeiras com a rede neural =)
+	 * @throws IOException
+	 */
 	private static void brincandoComRN() throws IOException {
 		List<String> stopWords = loadStopWords();
 		List<Review> comentarios = new ArrayList<>();
@@ -160,4 +169,5 @@ public class App {
 		trainingNeuralNetwork(neuralNetwork, comentarios);
 
 	}
+	
 }
