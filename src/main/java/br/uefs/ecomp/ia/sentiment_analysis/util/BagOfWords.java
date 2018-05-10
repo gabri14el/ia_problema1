@@ -3,13 +3,18 @@ package br.uefs.ecomp.ia.sentiment_analysis.util;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BagOfWords {
 
 	public static int BINARY = 1;
 	public static int TERM_FREQUENCY = 2;
+
+	private static double FREQUENCY_TO_IGNORE_WORDS = 5;
 
 	private List<String> stopWords;
 	private List<String> text;
@@ -19,10 +24,12 @@ public class BagOfWords {
 	public BagOfWords() {
 		vocabullary = new ArrayList<>();
 		text = new LinkedList<>();
+		stopWords = new LinkedList<>();
 	}
 
 	public void setStopWords(List<String> stopWords) {
-		this.stopWords = stopWords;
+		this.stopWords.clear();
+		stopWords.forEach((s) -> this.stopWords.add(clean(s))); // Limpa os stop words
 	}
 
 	public void setType(int type) {
@@ -34,15 +41,23 @@ public class BagOfWords {
 	}
 
 	public void initialize() {
+		Map<String, Integer> map = new HashMap<>();
+		vocabullary.clear();
+
 		for (String t : text) {
 			t = clean(t);
 			List<String> words = new LinkedList<>(Arrays.asList(t.split("\\s")));
 			words.removeAll(stopWords);
 
 			for (String w : words)
-				if (!vocabullary.contains(w))
-					vocabullary.add(w);
+				map.put(w, (map.containsKey(w)) ? (map.get(w) + 1) : 1);
 		}
+
+		// Remove as palavras com baixa frequência
+		Set<String> words = map.keySet();
+		words.removeIf((w) -> map.get(w) < FREQUENCY_TO_IGNORE_WORDS);
+		vocabullary.addAll(words);
+
 		System.out.println("Tamanho do vocabulário: " + vocabullary.size());
 	}
 
@@ -80,27 +95,19 @@ public class BagOfWords {
 	private String clean(String t) {
 		t = Normalizer.normalize(t, Normalizer.Form.NFD);
 		t = t.replaceAll("[^\\p{ASCII}]", ""); // Remove qualquer coisa fora da ascii
-		t = t.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+		t = t.replaceAll("[\\p{InCombiningDiacriticalMarks}]", ""); // Remove acentuação
 		t = t.replaceAll("\\d", ""); // Remove números
+		t = t.replaceAll("(([A-Za-z])(\\2)+)", "$2"); // Remove caracteres duplicados, como aa, ee, ii...
 		t = t.replaceAll("\\s+", " ");
-		t = removeDoubleChars(t);
 		t = t.trim();
 
-		return t;
-	}
-
-	private String removeDoubleChars(String t) {
-		t = t.replaceAll("[a]+", "a");
-		t = t.replaceAll("[e]+", "e");
-		t = t.replaceAll("[i]+", "i");
-		t = t.replaceAll("[o]+", "o");
-		t = t.replaceAll("[u]+", "u");
 		return t;
 	}
 
 	/**
 	 *
 	 * Método que retorna tamanho do vocabulário
+	 * 
 	 * @return
 	 */
 	public int getVocabullarySize() {
