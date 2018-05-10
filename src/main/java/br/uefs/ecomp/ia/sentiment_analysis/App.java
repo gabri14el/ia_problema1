@@ -1,5 +1,6 @@
 package br.uefs.ecomp.ia.sentiment_analysis;
 
+import br.uefs.ecomp.ia.sentiment_analysis.model.ErrorData;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import br.uefs.ecomp.ia.sentiment_analysis.util.BagOfWords;
 import org.neuroph.core.Layer;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.Neuron;
+import org.neuroph.core.data.BufferedDataSet;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.core.events.LearningEvent;
@@ -31,6 +33,11 @@ public class App {
 	public static String INPUT_VALIDATION_FILE = "files/input_validation.csv";
 	public static String INPUT_TEST_FILE = "files/input_test.csv";
 	public static String COMMENTS_FILE = "files/comments.csv";
+        
+        //========================
+        
+        public static final double NEGATIVE_WEIGHT = 0.01;
+        public static final double POSITIVE_WEIGHT = 0.99;
 
 	public static void main(String[] args) throws IOException {
 		List<String> stopWords = loadStopWords();
@@ -38,7 +45,7 @@ public class App {
 		BagOfWords bow = createBOW(stopWords, reviews);
 		createVecReviews(reviews, bow);
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize())/2);
-		trainingNeuralNetwork(neuralNetwork, reviews); //TODO substituir por trainingReviews
+		//trainingNeuralNetwork(neuralNetwork, reviews, 0.3); //TODO substituir por trainingReviews
 	}
 
 	/**
@@ -71,30 +78,27 @@ public class App {
 	 * @param neuralNetwork
 	 * @param trainReviews
 	 */
-	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews){
-		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
-		DataSet traingSet = new DataSet(neuralNetwork.getInputsCount(), 1);
-		for (Review r: trainReviews){
-			double[] output;
-			double[] input = r.getVector();
+	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate){
+		
+                double[] bestWeights;
+                double minValidationError = -1;
+                List<ErrorData> errors = new LinkedList<>();
+                //criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
+		DataSet traingSet = List2DataSet(trainReviews, neuralNetwork.getInputsCount()
+                        , neuralNetwork.getOutputsCount());
 
-			//para facilitar o trabalho da conversão da sigmoide
-			if(r.isNegative())
-				output=new double[]{0.01};
-			else
-				output=new double[]{0.99};
-
-			//adiciona comentario na base de treinamento
-			traingSet.add(new DataSetRow(input, output));
-		}
-
-
+                DataSet validationSet = List2DataSet(validationReviews, neuralNetwork.getInputsCount(),
+                        neuralNetwork.getOutputsCount());
+                
+                System.out.println("sorteando pesos iniciais dos neuronios...");
+                initializeNeurons(neuralNetwork);
+                
 		System.out.println("iniciando treinamento da rede neural...");
-		BackPropagation backPropagation = new BackPropagation();
-		backPropagation.setMaxIterations(1000);
-
-		//backPropagation.setMaxError(0.01); setar erro maximo
-		//backPropagation.setLearningRate(0.5);	setar taza de aprendizado
+		
+                BackPropagation backPropagation = new BackPropagation();
+		backPropagation.setMaxIterations(500);  //quantidade maxima de epocas
+		backPropagation.setMaxError(0.1);       //erro maximo permitido para parar o treinamento
+		backPropagation.setLearningRate(learningRate);//taxa de aprendizado 
 
 		backPropagation.addListener(new LearningEventListener() {
 			@Override
@@ -103,11 +107,42 @@ public class App {
 				if(learningEvent.getEventType().equals(LearningEvent.Type.LEARNING_STOPPED))
 					System.out.println("o erro foi: "+ backPropagation.getTotalNetworkError());
 				//guardar junto os pesos dos neuronios quando alcancar o menor erro
-				else if(learningEvent.getEventType().equals(LearningEvent.Type.EPOCH_ENDED)){
-					//fazer aqui a validação a cada epoca
-					//nao tenho ideia de como fazer mas vida que segue
+				
+                                
+                                
+                                else if(learningEvent.getEventType().equals(LearningEvent.Type.EPOCH_ENDED)){
+                                    double validationError = 0;
+                                    double error; 
+                                    double mediumValidationError;
+                                    
+                                    //passa por todas as linhas de trainamento, salvando o erro quadrático
+                                    for(DataSetRow r: validationSet){
+                                        neuralNetwork.setInput(r.getInput());
+                                        neuralNetwork.calculate();
+                                        double[] output = neuralNetwork.getOutput();
+                                        validationError+= (r.getDesiredOutput()[0] - output[0])*(r.getDesiredOutput()[0] - output[0]); //erro quadratico, por isso elevar ao quadrado       
+                                    }
+                                    
+                                    //calcula o erro quadrático médio
+                                    mediumValidationError = validationError/validationSet.size(); //erro de validacao
+                                    //pega o erro de treinamento 
+                                    double trainingError = backPropagation.getPreviousEpochError(); //erro de treino
+            
+                                    
+                                    ErrorData errorData = new ErrorData(mediumValidationError, 
+                                            trainingError, backPropagation.getCurrentIteration()); //objeto que usaremos para construir os gráficos
+                                    errors.add(errorData);
+                                    
+                                    if(minValidationError == -1){
+                                        //minValidationError = mediumValidationError;
+                                        //aqui significa que é a primeira vez e deve se setar tudo 
+                                    }else if(mediumValidationError <= minValidationError){
+                                        //se o erro for menor, salva ele e também salva os pesos dos neuronios para utilizar durante o teste
+                                    }
 				}
 			}
+                        
+                        
 		});
 		long inicio = System.currentTimeMillis();
 		neuralNetwork.learn(traingSet, backPropagation);
@@ -177,19 +212,51 @@ public class App {
 		BagOfWords bow = createBOW(stopWords, comentarios);
 		createVecReviews(comentarios, bow);
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, bow.getVocabullarySize()/2);
-		trainingNeuralNetwork(neuralNetwork, comentarios);
+		//trainingNeuralNetwork(neuralNetwork, comentarios, 0.3);
 
 	}
 
 
-	private void initializeNeurons(NeuralNetwork neuralNetwork){
+        /**
+         * Métodos responsável por colocar pesos aleatórios nos neurônios.
+         * @param neuralNetwork 
+         */
+	private static void initializeNeurons(NeuralNetwork neuralNetwork){
 		Layer hiddenLayer = neuralNetwork.getLayerAt(1);
 		List<Neuron> neurons = hiddenLayer.getNeurons();
 
-		Random random = new Random(100);
+		Random random = new Random(50);
 		for(Neuron n: neurons){
 			n.initializeWeights(random.nextInt()/100);
 			System.out.println(n.getWeights());
 		}
 	}
+        
+        
+        /**
+         * Converte uma lista de de reviews num objeto DataSet 
+         * @param reviews lista de reviews
+         * @param inputCount dimensão da entrada
+         * @param outputCount dimensão da saída
+         * @return objeto dataset
+         */
+        private static DataSet List2DataSet(List<Review> reviews, int inputCount, int outputCount){
+            DataSet set = new DataSet(inputCount, outputCount);
+		for (Review r: reviews){
+			double[] output;
+			double[] input = r.getVector();
+
+			//para facilitar o trabalho da conversão da sigmoide
+			if(r.isNegative())
+				output=new double[]{NEGATIVE_WEIGHT};
+			else
+				output=new double[]{POSITIVE_WEIGHT};
+
+			//adiciona comentario na base de treinamento
+			set.add(new DataSetRow(input, output));
+		}
+          return set;
+        }
+        
+       
 }
