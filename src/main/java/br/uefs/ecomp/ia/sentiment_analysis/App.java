@@ -31,10 +31,8 @@ public class App {
 	public static String INPUT_TEST_FILE = "files/input_test.csv";
 	public static String COMMENTS_FILE = "files/comments.csv";
 
-	//========================
-
-	public static final double NEGATIVE_WEIGHT = 0.01;
-	public static final double POSITIVE_WEIGHT = 0.99;
+	private static final double NEGATIVE_WEIGHT = 0.01;
+	private static final double POSITIVE_WEIGHT = 0.99;
 
 	public static void main(String[] args) throws IOException {
 		List<String> stopWords = loadStopWords();

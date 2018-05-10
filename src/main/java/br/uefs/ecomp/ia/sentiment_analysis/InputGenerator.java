@@ -16,35 +16,29 @@ import java.util.List;
 import java.util.Random;
 import br.uefs.ecomp.ia.sentiment_analysis.model.Review;
 
+/**
+ * Classe utilizada para manipular o base original de dados reduzindo, balanceando e
+ * separando em subconjuntos os comentários extraídos.
+ * 
+ * @author Matob
+ *
+ */
 public class InputGenerator {
 
-	private static int total = 3000;
-	private static int total_p = (int) (total * (50.0 / 100.0));
-	private static int total_trainning = (int) (total * (60.0 / 100.0));
-	private static int total_validation = (int) (total * (10.0 / 100.0));
-	private static int total_test = (int) (total * (30.0 / 100.0));
+	private static int total = 3000; // Total de comentários
+	private static int total_p = (int) (total * (50.0 / 100.0)); // Total de comentários positivos que serem utilizados
+	private static int total_trainning = (int) (total * (60.0 / 100.0)); // Total de comentários que serão utilizados para treinamento
+	private static int total_validation = (int) (total * (10.0 / 100.0)); // Total de comentários que serão utilizados para validação
+	private static int total_test = (int) (total * (30.0 / 100.0)); // Total de comentários que serão utilizados para teste
 
-	private static List<Review> positives = new LinkedList<>();;
-	private static List<Review> negatives = new LinkedList<>();;
+	private static List<Review> positives = new LinkedList<>();
+	private static List<Review> negatives = new LinkedList<>();
 
 	private static Random rand = new Random();
 
 	public static void main(String[] args) throws IOException {
-		if (args.length > 1) {
-			total = Integer.parseInt(args[0]);
-
-			total_p = Integer.parseInt(args[1]);
-			total_p = total * (total_p / 100);
-
-			total_trainning = Integer.parseInt(args[2]);
-			total_trainning = total * (total_trainning / 100);
-
-			total_validation = Integer.parseInt(args[3]);
-			total_validation = total * (total_validation / 100);
-
-			total_test = 100 - total_trainning - total_validation;
-			total_test = total * (total_test / 100);
-		}
+		if (args.length > 1) // É possível configurar os parâmetros via linha de comando
+			loadParams(args);
 
 		readReviews();
 		fill();
@@ -53,11 +47,30 @@ public class InputGenerator {
 		reviews.addAll(positives);
 		reviews.addAll(negatives);
 		Comparator<Review> comparator = (r1, r2) -> Integer.compare(r1.getComment().hashCode() * rand.nextInt(), r2.getComment().hashCode() * rand.nextInt());
-		Collections.sort(reviews, comparator);
+		Collections.sort(reviews, comparator); // Embaralha os comentários de forma "aleatória"
 
 		output(reviews);
 	}
 
+	private static void loadParams(String[] args) {
+		total = Integer.parseInt(args[0]);
+
+		total_p = Integer.parseInt(args[1]);
+		total_p = total * (total_p / 100);
+
+		total_trainning = Integer.parseInt(args[2]);
+		total_trainning = total * (total_trainning / 100);
+
+		total_validation = Integer.parseInt(args[3]);
+		total_validation = total * (total_validation / 100);
+
+		total_test = 100 - total_trainning - total_validation;
+		total_test = total * (total_test / 100);
+	}
+
+	/**
+	 * Carrega todos os comentários separando-os em positivos e negativos
+	 */
 	private static void readReviews() throws IOException, UnsupportedEncodingException, FileNotFoundException {
 		Review review;
 		String[] line;
@@ -74,6 +87,10 @@ public class InputGenerator {
 		}
 	}
 
+	/**
+	 * Preenche as listas com comentários repetidos, caso não haja comentários suficientes para o
+	 * total informado. Caso haja mais comentários que o informado, o excedente é descartado.
+	 */
 	private static void fill() {
 		if (positives.size() > total_p) {
 			positives = positives.subList(0, total_p);
@@ -90,6 +107,9 @@ public class InputGenerator {
 		}
 	}
 
+	/**
+	 * Separa os comentários nos grupos de treinamento, validação e teste e os armazena em arquivos.
+	 */
 	private static void output(List<Review> reviews) throws IOException {
 		int o = 0;
 		int n = total_trainning;
