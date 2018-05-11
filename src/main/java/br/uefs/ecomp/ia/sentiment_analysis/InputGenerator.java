@@ -25,7 +25,7 @@ import br.uefs.ecomp.ia.sentiment_analysis.model.Review;
  */
 public class InputGenerator {
 
-	private static int total = 3000; // Total de comentários
+	private static int total = 5000; // Total de comentários
 	private static int total_p = (int) (total * (50.0 / 100.0)); // Total de comentários positivos que serem utilizados
 	private static int total_trainning = (int) (total * (60.0 / 100.0)); // Total de comentários que serão utilizados para treinamento
 	private static int total_validation = (int) (total * (10.0 / 100.0)); // Total de comentários que serão utilizados para validação
