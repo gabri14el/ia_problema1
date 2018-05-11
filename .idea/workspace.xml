@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="93a37fb8-6135-40ab-8abe-81b0121866bb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/input_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/files/input_test.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/input_trainning.csv" beforeDir="false" afterPath="$PROJECT_DIR$/files/input_trainning.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/input_validation.csv" beforeDir="false" afterPath="$PROJECT_DIR$/files/input_validation.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -19,8 +23,8 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="268" column="4" selection-start-line="268" selection-start-column="4" selection-end-line="268" selection-end-column="4" />
+            <state relative-caret-position="285">
+              <caret line="51" column="32" lean-forward="true" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -56,8 +60,8 @@
       <file leaf-file-name="BagOfWords.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="125" lean-forward="true" selection-start-line="125" selection-end-line="125" />
+            <state relative-caret-position="975">
+              <caret line="161" lean-forward="true" selection-start-line="161" selection-end-line="161" />
             </state>
           </provider>
         </entry>
@@ -372,7 +376,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java</url>
-          <line>144</line>
+          <line>142</line>
           <properties />
         </line-breakpoint>
       </breakpoints>
@@ -607,8 +611,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="125" lean-forward="true" selection-start-line="125" selection-end-line="125" />
+        <state relative-caret-position="975">
+          <caret line="161" lean-forward="true" selection-start-line="161" selection-end-line="161" />
         </state>
       </provider>
     </entry>
@@ -621,8 +625,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="268" column="4" selection-start-line="268" selection-start-column="4" selection-end-line="268" selection-end-column="4" />
+        <state relative-caret-position="285">
+          <caret line="51" column="32" lean-forward="true" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="32" />
         </state>
       </provider>
     </entry>

@@ -33,7 +33,6 @@ public class App {
 	private static final double NEGATIVE_WEIGHT = 0.01;
 	private static final double POSITIVE_WEIGHT = 0.99;
 
-
 	public static void main(String[] args) throws IOException {
 		List<Review> test = load(INPUT_TEST_FILE);
 		List<Review> validation = load(INPUT_VALIDATION_FILE);
@@ -91,10 +90,10 @@ public class App {
 		return neuralNetwork;
 	}
 
-	private static double[] DoubleVectorToPrimitive(Double[] vector){
+	private static double[] DoubleVectorToPrimitive(Double[] vector) {
 		double primitiveVector[] = new double[vector.length];
 
-		for(int i=0; i<vector.length; i++){
+		for (int i = 0; i < vector.length; i++) {
 			primitiveVector[i] = vector[i].doubleValue();
 		}
 		return primitiveVector;
@@ -127,6 +126,8 @@ public class App {
 		backPropagation.setMaxError(maxError); //erro maximo permitido para parar o treinamento
 		backPropagation.setLearningRate(learningRate);//taxa de aprendizado 
 
+		System.out.println("Erro Mínimo Erro Médio  Erro Treino");
+		long time = System.currentTimeMillis();
 		backPropagation.addListener(new LearningEventListener() {
 
 			@Override
@@ -157,7 +158,6 @@ public class App {
 							trainingError, backPropagation.getCurrentIteration()); //objeto que usaremos para construir os gráficos
 					errors.add(errorData);
 
-
 					if (minValidationError[0] == -1) {
 						minValidationError[0] = mediumValidationError;
 						bestWeights[0] = neuralNetwork.getWeights();
@@ -166,18 +166,13 @@ public class App {
 						bestWeights[0] = neuralNetwork.getWeights();
 					}
 
-					System.out.println("erros: "+minValidationError[0]+", "+mediumValidationError+", "+trainingError);
+					System.out.println("Time (s): " + ((System.currentTimeMillis() - time) / 1000));
+					System.out.format("%11d %11d %11d", minValidationError, mediumValidationError, trainingError);
 				}
 			}
 		});
 
-		long inicio = System.currentTimeMillis();
-
 		neuralNetwork.learn(traingSet, backPropagation);
-
-		long fim = System.currentTimeMillis();
-
-		System.out.println("treinamento terminado em :" + (fim - inicio) / 1000 + "segundos");
 		neuralNetwork.setWeights(DoubleVectorToPrimitive(bestWeights[0]));
 	}
 
@@ -255,7 +250,7 @@ public class App {
 	private static double[][] testNeuralNetwork(List<Review> test, NeuralNetwork neuralNetwork){
 		DataSet testSet = List2DataSet(test, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
 		double[][] resultados = new double[2][testSet.size()];
-		for (int i =0; i<testSet.size(); i++) {
+		for (int i = 0; i < testSet.size(); i++) {
 			neuralNetwork.setInput(testSet.get(i).getInput());
 			neuralNetwork.calculate();
 			double desejado = testSet.get(i).getDesiredOutput()[0];
