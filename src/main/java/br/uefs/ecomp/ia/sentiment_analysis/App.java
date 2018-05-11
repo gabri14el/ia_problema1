@@ -25,6 +25,8 @@ import br.uefs.ecomp.ia.sentiment_analysis.model.ErrorData;
 import br.uefs.ecomp.ia.sentiment_analysis.model.Review;
 import br.uefs.ecomp.ia.sentiment_analysis.util.BagOfWords;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 public class App {
 
 	public static String STOP_WORDS_FILE = "files/stopwords.txt";
@@ -53,22 +55,69 @@ public class App {
 
 		System.out.println("tamanho do vocabulario: "+bow.getVocabullarySize()); //deixa essa porra aí
 
-		System.out.println("==================================================================================");
+		System.out.println("###################################  TREINAMENTO 1  ###################################");
 		int hiddenLayerSize = bow.getVocabullarySize();
-		System.out.println("qauntidade de neuronios da camada oculta: "+hiddenLayerSize);
+		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
+		System.out.println("treinamento dynamic backpropagation");
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
 		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.05,
 				0.05, 100, 0.9, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
 		double[][] resultado = testNeuralNetwork(test, neuralNetwork);
 		printResults(resultado);
 
+
 		System.out.println("\n\n");
-		System.out.println("==================================================================================");
-		hiddenLayerSize = 10000;
+		System.out.println("###################################  TREINAMENTO 2  ###################################");
+		System.out.println("treinamento backpropagation");
+		hiddenLayerSize = bow.getVocabullarySize();
+		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
+		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.05,
+				0.05, 100, 0.9, BACKPROPAGATION); //TODO substituir por trainingReviews
+		resultado = testNeuralNetwork(test, neuralNetwork);
+		printResults(resultado);
+
+		System.out.println("\n\n");
+		System.out.println("###################################  TREINAMENTO 3  ###################################");
+		hiddenLayerSize = 1000;
+		System.out.println("treinamento dynamic backpropagation");
+		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
+		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.5, 0.05,
+				0.07, 100, 0.7, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
+		resultado = testNeuralNetwork(test, neuralNetwork);
+		printResults(resultado);
+
+		System.out.println("\n\n");
+		System.out.println("###################################  TREINAMENTO 4  ###################################");
+		hiddenLayerSize = 1000;
+		System.out.println("treinamento backpropagation");
 		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
 		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
 		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.5, 0.05,
 				0.07, 100, 0.7, BACKPROPAGATION); //TODO substituir por trainingReviews
+		resultado = testNeuralNetwork(test, neuralNetwork);
+		printResults(resultado);
+
+		System.out.println("\n\n");
+		System.out.println("###################################  TREINAMENTO 5  ###################################");
+		hiddenLayerSize = bow.getVocabullarySize();
+		System.out.println("treinamento dynamic backpropagation");
+		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
+		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,1, 0.01,
+				0.1, 100, 0.9, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
+		resultado = testNeuralNetwork(test, neuralNetwork);
+		printResults(resultado);
+
+		System.out.println("\n\n");
+		System.out.println("###################################  TREINAMENTO 6  ###################################");
+		hiddenLayerSize = bow.getVocabullarySize();
+		System.out.println("treinamento backpropagation");
+		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
+		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,1, 0.01,
+				0.1, 100, 0.9, BACKPROPAGATION); //TODO substituir por trainingReviews
 		resultado = testNeuralNetwork(test, neuralNetwork);
 		printResults(resultado);
 	}
@@ -79,7 +128,7 @@ public class App {
 	 * @param results
 	 */
 	private static void printResults(double[][] results){
-		System.out.println("=============RESULTADOS============");
+		System.out.println("==================RESULTADOS==================");
 		System.out.println("esperado\tobtido");
 		int acertos = 0;
 		for(int i=0; i<results.length; i++){
@@ -87,10 +136,11 @@ public class App {
 			if((results[0][i]> 0.5 && results[1][i]>0.5) || (results[0][i]<= 0.5 && results[1][i]<=0.5))
 				acertos++;
 		}
-		System.out.println("==========================");
+		System.out.println("----------------------");
 		System.out.println("total de comentarios: "+results.length);
 		System.out.println("total de acertos: "+acertos);
 		System.out.println("porcentagem de acerto: "+(acertos/results.length)*100);
+		System.out.println("----------------------");
 	}
 	private static List<Review> load(String fileName) throws IOException {
 		List<Review> reviews = new LinkedList<>();
@@ -178,8 +228,8 @@ public class App {
 			//backPropagation.setLearningRate(learningRate);//taxa de aprendizado
 			//backPropagation.setBatchMode(true);
 
-			//((DynamicBackPropagation)backPropagation).setMaxLearningRate(maxLearningRate);
-			//((DynamicBackPropagation)backPropagation).setLearningRateChange(maxLearningRateChange);
+			((DynamicBackPropagation)backPropagation).setMaxLearningRate(maxLearningRate);
+			((DynamicBackPropagation)backPropagation).setLearningRateChange(maxLearningRateChange);
 			((DynamicBackPropagation)backPropagation).setMaxMomentum(maxMomentum);
 		}
 		else if(treinamento == 2){
@@ -204,8 +254,8 @@ public class App {
 			@Override
 			public void handleLearningEvent(LearningEvent learningEvent) {
 				if (learningEvent.getEventType().equals(LearningEvent.Type.LEARNING_STOPPED)){
-					System.out.println("===========================================");
-					System.out.println("erro de validacao: "+minValidationError[0]);
+					System.out.println("==================FIM DE TREINAMENTO==================");
+					System.out.println("menor erro de validacao: "+minValidationError[0]);
 					System.out.println("quantidade de epocas: "+backPropagation.getCurrentIteration());
 					System.out.println("erro total na rede neural: "+backPropagation.getTotalNetworkError());
 				}
@@ -242,7 +292,7 @@ public class App {
 
 					//System.out.println("Time (s): " + ((System.currentTimeMillis() - time) / 1000));
 					//System.out.format("%11d %11d %11d", minValidationError, mediumValidationError, trainingError); ta errado
-					System.out.println(minValidationError[0]+"\t\t"+mediumValidationError+"\t\t"+trainingError);
+					System.out.println(mediumValidationError+"\t\t"+trainingError);
 				}
 			}
 		});
