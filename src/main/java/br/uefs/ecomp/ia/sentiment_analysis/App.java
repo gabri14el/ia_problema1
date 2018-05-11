@@ -46,7 +46,8 @@ public class App {
 		createVecReviews(trainning, bow);
 
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()));
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3); //TODO substituir por trainingReviews
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.003, 50); //TODO substituir por trainingReviews
+		double[][] resultado = testNeuralNetwork(test, neuralNetwork);
 	}
 
 	private static List<Review> load(String fileName) throws IOException {
@@ -106,7 +107,7 @@ public class App {
 	 * @param neuralNetwork
 	 * @param trainReviews
 	 */
-	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate) {
+	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate, double maxError, int maxEpoch) {
 		Double[][] bestWeights = new Double[][] { {} };
 		double[] minValidationError = new double[] { -1 };
 		List<ErrorData> errors = new LinkedList<>();
@@ -122,8 +123,8 @@ public class App {
 		System.out.println("iniciando treinamento da rede neural...");
 
 		BackPropagation backPropagation = new BackPropagation();
-		backPropagation.setMaxIterations(100); //quantidade maxima de epocas
-		backPropagation.setMaxError(0.003); //erro maximo permitido para parar o treinamento
+		backPropagation.setMaxIterations(maxEpoch); //quantidade maxima de epocas
+		backPropagation.setMaxError(maxError); //erro maximo permitido para parar o treinamento
 		backPropagation.setLearningRate(learningRate);//taxa de aprendizado 
 
 		backPropagation.addListener(new LearningEventListener() {
@@ -251,7 +252,7 @@ public class App {
 		return set;
 	}
 
-	private static double[][] TestNeuralNetwork(List<Review> test, NeuralNetwork neuralNetwork){
+	private static double[][] testNeuralNetwork(List<Review> test, NeuralNetwork neuralNetwork){
 		DataSet testSet = List2DataSet(test, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
 		double[][] resultados = new double[2][testSet.size()];
 		for (int i =0; i<testSet.size(); i++) {
@@ -265,5 +266,6 @@ public class App {
 
 		return resultados;
 	}
+	
 
 }
