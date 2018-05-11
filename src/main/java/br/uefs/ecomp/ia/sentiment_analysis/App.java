@@ -43,12 +43,9 @@ public class App {
 		List<Review> trainning = load(INPUT_TRAINNING_FILE);
 
 		List<String> stopWords = loadStopWords();
-		List<Review> reviews = new LinkedList<>();
-		reviews.addAll(validation);
-		reviews.addAll(trainning);
 
-		BagOfWords bow = createBOW(stopWords, reviews);
-		createVecReviews(reviews, bow);
+		BagOfWords bow = createBOW(stopWords, trainning);
+		createVecReviews(trainning, bow);
 
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
 		//trainingNeuralNetwork(neuralNetwork, reviews, 0.3); //TODO substituir por trainingReviews
