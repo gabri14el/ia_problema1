@@ -242,7 +242,7 @@ public class App {
 		else{
 			backPropagation = new ResilientPropagation();
 			((ResilientPropagation)backPropagation).setMaxIterations(maxEpoch); //quantidade maxima de epocas
-			((ResilientPropagation)backPropagation).setMaxError(maxError); //erro maximo permitido para parar o treinamento
+			//((ResilientPropagation)backPropagation).setMaxError(maxError); //erro maximo permitido para parar o treinamento
 			//((ResilientPropagation)backPropagation).setLearningRate(maxLearningRate);//taxa de aprendizado
 		}
 

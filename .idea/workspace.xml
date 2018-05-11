@@ -18,8 +18,8 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="231" column="12" lean-forward="true" selection-start-line="231" selection-start-column="12" selection-end-line="231" selection-end-column="12" />
+            <state relative-caret-position="286">
+              <caret line="243" column="12" selection-start-line="243" selection-start-column="12" selection-end-line="243" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -335,7 +335,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5090909" side_tool="true" weight="0.4437086" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32890365" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4909091" visible="true" weight="0.02915952" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4909091" visible="true" weight="0.15951973" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4969697" weight="0.32890365" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -628,8 +628,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="231" column="12" lean-forward="true" selection-start-line="231" selection-start-column="12" selection-end-line="231" selection-end-column="12" />
+        <state relative-caret-position="286">
+          <caret line="243" column="12" selection-start-line="243" selection-start-column="12" selection-end-line="243" selection-end-column="12" />
         </state>
       </provider>
     </entry>
