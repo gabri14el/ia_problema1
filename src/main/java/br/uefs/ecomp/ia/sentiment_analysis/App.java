@@ -45,7 +45,7 @@ public class App {
 		createVecReviews(validation, bow);
 		createVecReviews(trainning, bow);
 
-		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
+		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()));
 		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3); //TODO substituir por trainingReviews
 	}
 
@@ -122,8 +122,8 @@ public class App {
 		System.out.println("iniciando treinamento da rede neural...");
 
 		BackPropagation backPropagation = new BackPropagation();
-		backPropagation.setMaxIterations(500); //quantidade maxima de epocas
-		backPropagation.setMaxError(0.1); //erro maximo permitido para parar o treinamento
+		backPropagation.setMaxIterations(100); //quantidade maxima de epocas
+		backPropagation.setMaxError(0.003); //erro maximo permitido para parar o treinamento
 		backPropagation.setLearningRate(learningRate);//taxa de aprendizado 
 
 		backPropagation.addListener(new LearningEventListener() {
@@ -150,11 +150,12 @@ public class App {
 					//calcula o erro quadrático médio
 					mediumValidationError = validationError / validationSet.size(); //erro de validacao
 					//pega o erro de treinamento 
-					double trainingError = backPropagation.getPreviousEpochError(); //erro de treino
+					double trainingError = backPropagation.getTotalNetworkError(); //erro de treino
 
 					ErrorData errorData = new ErrorData(mediumValidationError,
 							trainingError, backPropagation.getCurrentIteration()); //objeto que usaremos para construir os gráficos
 					errors.add(errorData);
+
 
 					if (minValidationError[0] == -1) {
 						minValidationError[0] = mediumValidationError;
@@ -163,6 +164,8 @@ public class App {
 						minValidationError[0] = mediumValidationError;
 						bestWeights[0] = neuralNetwork.getWeights();
 					}
+
+					System.out.println("erros: "+minValidationError[0]+", "+mediumValidationError+", "+trainingError);
 				}
 			}
 		});
