@@ -41,6 +41,8 @@ public class App {
 		List<String> stopWords = loadStopWords();
 
 		BagOfWords bow = createBOW(stopWords, trainning);
+		createVecReviews(test, bow);
+		createVecReviews(validation, bow);
 		createVecReviews(trainning, bow);
 
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
