@@ -34,15 +34,20 @@ public class App {
 	private static final double NEGATIVE_WEIGHT = 0.01;
 	private static final double POSITIVE_WEIGHT = 0.99;
 
-	private static Double[] bestWeights;
 
 
 	public static void main(String[] args) throws IOException {
+
 		List<String> stopWords = loadStopWords();
 		List<Review> reviews = loadReviews();
-		BagOfWords bow = createBOW(stopWords, reviews);
-		createVecReviews(reviews, bow);
-		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
+		List<Review> test;
+		List<Review> validation;
+		List<Review> trainning;
+
+		//BagOfWords bow = createBOW(stopWords, reviews);
+		//createVecReviews(reviews, bow);
+
+		//NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
 		//trainingNeuralNetwork(neuralNetwork, reviews, 0.3); //TODO substituir por trainingReviews
 	}
 
@@ -73,6 +78,15 @@ public class App {
 	private static NeuralNetwork createSimplePerceptronNN(BagOfWords bow) {
 		NeuralNetwork neuralNetwork = new Perceptron(bow.getVocabullarySize(), 1, TransferFunctionType.SIGMOID);
 		return neuralNetwork;
+	}
+
+	private static double[] DoubleVectorToPrimitive(Double[] vector){
+		double primitiveVector[] = new double[vector.length];
+
+		for(int i=0; i<vector.length; i++){
+			primitiveVector[i] = vector[i].doubleValue();
+		}
+		return primitiveVector;
 	}
 
 	/**
@@ -141,15 +155,16 @@ public class App {
 					}
 				}
 			}
-
 		});
 
 		long inicio = System.currentTimeMillis();
+
 		neuralNetwork.learn(traingSet, backPropagation);
+
 		long fim = System.currentTimeMillis();
 
 		System.out.println("treinamento terminado em :" + (fim - inicio) / 1000 + "segundos");
-
+		neuralNetwork.setWeights(DoubleVectorToPrimitive(bestWeights[0]));
 	}
 
 	private static List<String> loadStopWords() throws IOException {
@@ -199,10 +214,10 @@ public class App {
 		Layer hiddenLayer = neuralNetwork.getLayerAt(1);
 		List<Neuron> neurons = hiddenLayer.getNeurons();
 
-		Random random = new Random(50);
+		Random random = new Random();
 		for (Neuron n : neurons) {
-			n.initializeWeights(random.nextInt() / 100);
-			System.out.println(n.getWeights());
+			n.initializeWeights(random.nextGaussian());
+			//System.out.println(n.getWeights());
 		}
 	}
 
@@ -234,4 +249,20 @@ public class App {
 		}
 		return set;
 	}
+
+	private static double[][] TestNeuralNetwork(List<Review> test, NeuralNetwork neuralNetwork){
+		DataSet testSet = List2DataSet(test, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
+		double[][] resultados = new double[2][testSet.size()];
+		for (int i =0; i<testSet.size(); i++) {
+			neuralNetwork.setInput(testSet.get(i).getInput());
+			neuralNetwork.calculate();
+			double desejado = testSet.get(i).getDesiredOutput()[0];
+			double saida = neuralNetwork.getOutput()[0];
+			resultados[0][i] = desejado;
+			resultados[1][i] = saida;
+		}
+
+		return resultados;
+	}
+
 }
