@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -34,9 +33,6 @@ public class App {
 	private static final double NEGATIVE_WEIGHT = 0.01;
 	private static final double POSITIVE_WEIGHT = 0.99;
 
-	private static Double[] bestWeights;
-
-
 	public static void main(String[] args) throws IOException {
 		List<Review> test = load(INPUT_TEST_FILE);
 		List<Review> validation = load(INPUT_VALIDATION_FILE);
@@ -54,7 +50,7 @@ public class App {
 	private static List<Review> load(String fileName) throws IOException {
 		List<Review> reviews = new LinkedList<>();
 		String[] line;
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(App.COMMENTS_FILE), "UTF-8"))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"))) {
 			while (reader.ready()) {
 				line = reader.readLine().split(";");
 				reviews.add(new Review(Integer.parseInt(line[0]), line[1], line[2]));
@@ -100,8 +96,8 @@ public class App {
 	 * @param trainReviews
 	 */
 	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate) {
-		Double[][] bestWeights = new Double[][]{{}};
-		double[] minValidationError = new double[]{-1};
+		Double[][] bestWeights = new Double[][] { {} };
+		double[] minValidationError = new double[] { -1 };
 		List<ErrorData> errors = new LinkedList<>();
 		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
 		DataSet traingSet = List2DataSet(trainReviews, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
@@ -194,7 +190,6 @@ public class App {
 			r.setVector(vec);
 		}
 	}
-
 
 	/**
 	 * Métodos responsável por colocar pesos aleatórios nos neurônios.
