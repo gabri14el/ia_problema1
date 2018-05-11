@@ -34,6 +34,9 @@ public class App {
 	private static final double NEGATIVE_WEIGHT = 0.01;
 	private static final double POSITIVE_WEIGHT = 0.99;
 
+	private static Double[] bestWeights;
+
+
 	public static void main(String[] args) throws IOException {
 		List<Review> test = load(INPUT_TEST_FILE);
 		List<Review> validation = load(INPUT_VALIDATION_FILE);
@@ -100,9 +103,8 @@ public class App {
 	 * @param trainReviews
 	 */
 	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate) {
-
-		double[] bestWeights;
-		double minValidationError = -1;
+		Double[][] bestWeights = new Double[][]{{}};
+		double[] minValidationError = new double[]{-1};
 		List<ErrorData> errors = new LinkedList<>();
 		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
 		DataSet traingSet = List2DataSet(trainReviews, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
@@ -131,7 +133,6 @@ public class App {
 
 				else if (learningEvent.getEventType().equals(LearningEvent.Type.EPOCH_ENDED)) {
 					double validationError = 0;
-					double error;
 					double mediumValidationError;
 
 					//passa por todas as linhas de trainamento, salvando o erro quadrático
@@ -151,16 +152,18 @@ public class App {
 							trainingError, backPropagation.getCurrentIteration()); //objeto que usaremos para construir os gráficos
 					errors.add(errorData);
 
-					if (minValidationError == -1) {
-						//minValidationError = mediumValidationError;
-						//aqui significa que é a primeira vez e deve se setar tudo 
-					} else if (mediumValidationError <= minValidationError) {
-						//se o erro for menor, salva ele e também salva os pesos dos neuronios para utilizar durante o teste
+					if (minValidationError[0] == -1) {
+						minValidationError[0] = mediumValidationError;
+						bestWeights[0] = neuralNetwork.getWeights();
+					} else if (mediumValidationError <= minValidationError[0]) {
+						minValidationError[0] = mediumValidationError;
+						bestWeights[0] = neuralNetwork.getWeights();
 					}
 				}
 			}
 
 		});
+
 		long inicio = System.currentTimeMillis();
 		neuralNetwork.learn(traingSet, backPropagation);
 		long fim = System.currentTimeMillis();
@@ -195,32 +198,6 @@ public class App {
 		}
 	}
 
-	/**
-	 * Método temporário so pra testar as brincadeiras com a rede neural =)
-	 * 
-	 * @throws IOException
-	 */
-	private static void brincandoComRN() throws IOException {
-		List<String> stopWords = loadStopWords();
-		List<Review> comentarios = new ArrayList<>();
-
-		comentarios.add(new Review(5, "top"));
-		comentarios.add(new Review(5, "produto legal"));
-		comentarios.add(new Review(5, "produto bom"));
-		comentarios.add(new Review(5, "gostei"));
-
-		comentarios.add(new Review(1, "ruim"));
-		comentarios.add(new Review(1, "nao gostei"));
-		comentarios.add(new Review(1, "produto de qualidade duvidosa"));
-		comentarios.add(new Review(1, "produto meia boca"));
-		comentarios.add(new Review(1, "pessimo me arrependi muito"));
-
-		BagOfWords bow = createBOW(stopWords, comentarios);
-		createVecReviews(comentarios, bow);
-		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, bow.getVocabullarySize() / 2);
-		//trainingNeuralNetwork(neuralNetwork, comentarios, 0.3);
-
-	}
 
 	/**
 	 * Métodos responsável por colocar pesos aleatórios nos neurônios.
