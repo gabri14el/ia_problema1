@@ -35,12 +35,32 @@ public class App {
 	private static final double POSITIVE_WEIGHT = 0.99;
 
 	public static void main(String[] args) throws IOException {
+		List<Review> test = load(INPUT_TEST_FILE);
+		List<Review> validation = load(INPUT_VALIDATION_FILE);
+		List<Review> trainning = load(INPUT_TRAINNING_FILE);
+
 		List<String> stopWords = loadStopWords();
-		List<Review> reviews = loadReviews();
+		List<Review> reviews = new LinkedList<>();
+		reviews.addAll(validation);
+		reviews.addAll(trainning);
+
 		BagOfWords bow = createBOW(stopWords, reviews);
 		createVecReviews(reviews, bow);
+
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
 		//trainingNeuralNetwork(neuralNetwork, reviews, 0.3); //TODO substituir por trainingReviews
+	}
+
+	private static List<Review> load(String fileName) throws IOException {
+		List<Review> reviews = new LinkedList<>();
+		String[] line;
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(App.COMMENTS_FILE), "UTF-8"))) {
+			while (reader.ready()) {
+				line = reader.readLine().split(";");
+				reviews.add(new Review(Integer.parseInt(line[0]), line[1], line[2]));
+			}
+		}
+		return reviews;
 	}
 
 	/**
@@ -155,17 +175,6 @@ public class App {
 			reader.lines().forEach((l) -> stopWords.add(l));
 		}
 		return stopWords;
-	}
-
-	private static List<Review> loadReviews() throws IOException {
-		List<Review> reviews = new LinkedList<>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(INPUT_TRAINNING_FILE), "UTF-8"))) {
-			reader.lines().forEach((l) -> {
-				String[] line = l.split(";");
-				reviews.add(new Review(Integer.parseInt(line[0]), line[1], line[2]));
-			});
-		}
-		return reviews;
 	}
 
 	private static BagOfWords createBOW(List<String> stopWords, List<Review> reviews) {
