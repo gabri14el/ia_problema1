@@ -26,7 +26,7 @@ public class BagOfWords {
 	public static int BINARY = 1;
 	public static int TERM_FREQUENCY = 2;
 
-	private static double FREQUENCY_TO_IGNORE_WORDS = 1;
+	private static double FREQUENCY_TO_IGNORE_WORDS = 20;
 	private static boolean FREQUENCY_BY_DOC = true;
 
 	private List<String> stopWords; // Lista contendo as palavras que serão desconsideradas (passa pelo método clean)

@@ -17,6 +17,9 @@ import org.neuroph.core.events.LearningEventListener;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.Perceptron;
 import org.neuroph.nnet.learning.BackPropagation;
+import org.neuroph.nnet.learning.DynamicBackPropagation;
+import org.neuroph.nnet.learning.MomentumBackpropagation;
+import org.neuroph.nnet.learning.ResilientPropagation;
 import org.neuroph.util.TransferFunctionType;
 import br.uefs.ecomp.ia.sentiment_analysis.model.ErrorData;
 import br.uefs.ecomp.ia.sentiment_analysis.model.Review;
@@ -33,6 +36,10 @@ public class App {
 	private static final double NEGATIVE_WEIGHT = 0.01;
 	private static final double POSITIVE_WEIGHT = 0.99;
 
+	private static int DYNAMIC_MOMENTUM_BACKPROPAGATION = 1;
+	private static int BACKPROPAGATION = 2;
+	private static int RESILIENT_PROPAGATION = 3;
+
 	public static void main(String[] args) throws IOException {
 		List<Review> test = load(INPUT_TEST_FILE);
 		List<Review> validation = load(INPUT_VALIDATION_FILE);
@@ -44,11 +51,47 @@ public class App {
 		createVecReviews(validation, bow);
 		createVecReviews(trainning, bow);
 
-		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()));
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.003, 50); //TODO substituir por trainingReviews
+		System.out.println("tamanho do vocabulario: "+bow.getVocabullarySize()); //deixa essa porra aí
+
+		System.out.println("==================================================================================");
+		int hiddenLayerSize = bow.getVocabullarySize();
+		System.out.println("qauntidade de neuronios da camada oculta: "+hiddenLayerSize);
+		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.05,
+				0.05, 100, 0.9, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
 		double[][] resultado = testNeuralNetwork(test, neuralNetwork);
+		printResults(resultado);
+
+		System.out.println("\n\n");
+		System.out.println("==================================================================================");
+		hiddenLayerSize = 10000;
+		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
+		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.5, 0.05,
+				0.07, 100, 0.7, BACKPROPAGATION); //TODO substituir por trainingReviews
+		resultado = testNeuralNetwork(test, neuralNetwork);
+		printResults(resultado);
 	}
 
+
+	/**
+	 * Método para imprimir resultados
+	 * @param results
+	 */
+	private static void printResults(double[][] results){
+		System.out.println("=============RESULTADOS============");
+		System.out.println("esperado\tobtido");
+		int acertos = 0;
+		for(int i=0; i<results.length; i++){
+			System.out.println(results[0][i]+"\t"+results[1][i]);
+			if((results[0][i]> 0.5 && results[1][i]>0.5) || (results[0][i]<= 0.5 && results[1][i]<=0.5))
+				acertos++;
+		}
+		System.out.println("==========================");
+		System.out.println("total de comentarios: "+results.length);
+		System.out.println("total de acertos: "+acertos);
+		System.out.println("porcentagem de acerto: "+(acertos/results.length)*100);
+	}
 	private static List<Review> load(String fileName) throws IOException {
 		List<Review> reviews = new LinkedList<>();
 		String[] line;
@@ -106,13 +149,13 @@ public class App {
 	 * @param neuralNetwork
 	 * @param trainReviews
 	 */
-	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate, double maxError, int maxEpoch) {
+	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews,
+											  double maxLearningRate, double maxError, double maxLearningRateChange, int maxEpoch, double maxMomentum, int treinamento) {
 		Double[][] bestWeights = new Double[][] { {} };
 		double[] minValidationError = new double[] { -1 };
 		List<ErrorData> errors = new LinkedList<>();
 		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
 		DataSet traingSet = List2DataSet(trainReviews, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
-
 		DataSet validationSet = List2DataSet(validationReviews, neuralNetwork.getInputsCount(),
 				neuralNetwork.getOutputsCount());
 
@@ -120,22 +163,53 @@ public class App {
 		initializeNeurons(neuralNetwork);
 
 		System.out.println("iniciando treinamento da rede neural...");
+		System.out.println("taxa de aprendizado maxima: "+maxLearningRate);
+		System.out.println("maxima mudança na taxa de aprendizado: "+maxLearningRateChange);
+		System.out.println("momentum maximo: "+maxMomentum);
+		System.out.println("erro maximo: "+maxError);
+		System.out.println();
 
-		BackPropagation backPropagation = new BackPropagation();
-		backPropagation.setMaxIterations(maxEpoch); //quantidade maxima de epocas
-		backPropagation.setMaxError(maxError); //erro maximo permitido para parar o treinamento
-		backPropagation.setLearningRate(learningRate);//taxa de aprendizado 
 
-		System.out.println("Erro Mínimo Erro Médio  Erro Treino");
+		BackPropagation backPropagation;
+		if(treinamento == 1){
+			backPropagation = new DynamicBackPropagation();
+			backPropagation.setMaxIterations(maxEpoch); //quantidade maxima de epocas
+			backPropagation.setMaxError(maxError); //erro maximo permitido para parar o treinamento
+			//backPropagation.setLearningRate(learningRate);//taxa de aprendizado
+			//backPropagation.setBatchMode(true);
+
+			//((DynamicBackPropagation)backPropagation).setMaxLearningRate(maxLearningRate);
+			//((DynamicBackPropagation)backPropagation).setLearningRateChange(maxLearningRateChange);
+			((DynamicBackPropagation)backPropagation).setMaxMomentum(maxMomentum);
+		}
+		else if(treinamento == 2){
+			backPropagation = new BackPropagation();
+			backPropagation.setMaxIterations(maxEpoch); //quantidade maxima de epocas
+			backPropagation.setMaxError(maxError); //erro maximo permitido para parar o treinamento
+			backPropagation.setLearningRate(maxLearningRate);//taxa de aprendizado
+			backPropagation.setBatchMode(true);
+		}
+		else{
+			backPropagation = new ResilientPropagation();
+			((ResilientPropagation)backPropagation).setMaxIterations(maxEpoch); //quantidade maxima de epocas
+			((ResilientPropagation)backPropagation).setMaxError(maxError); //erro maximo permitido para parar o treinamento
+			//((ResilientPropagation)backPropagation).setLearningRate(maxLearningRate);//taxa de aprendizado
+		}
+
+
+		System.out.println("Erro Mínimo\t\tErro Médio\t\tErro Treino");
 		long time = System.currentTimeMillis();
 		backPropagation.addListener(new LearningEventListener() {
 
 			@Override
 			public void handleLearningEvent(LearningEvent learningEvent) {
-				System.out.println(learningEvent.getEventType().name());
-				if (learningEvent.getEventType().equals(LearningEvent.Type.LEARNING_STOPPED))
-					System.out.println("o erro foi: " + backPropagation.getTotalNetworkError());
-				//guardar junto os pesos dos neuronios quando alcancar o menor erro
+				if (learningEvent.getEventType().equals(LearningEvent.Type.LEARNING_STOPPED)){
+					System.out.println("===========================================");
+					System.out.println("erro de validacao: "+minValidationError[0]);
+					System.out.println("quantidade de epocas: "+backPropagation.getCurrentIteration());
+					System.out.println("erro total na rede neural: "+backPropagation.getTotalNetworkError());
+				}
+
 
 				else if (learningEvent.getEventType().equals(LearningEvent.Type.EPOCH_ENDED)) {
 					double validationError = 0;
@@ -166,8 +240,9 @@ public class App {
 						bestWeights[0] = neuralNetwork.getWeights();
 					}
 
-					System.out.println("Time (s): " + ((System.currentTimeMillis() - time) / 1000));
-					System.out.format("%11d %11d %11d", minValidationError, mediumValidationError, trainingError);
+					//System.out.println("Time (s): " + ((System.currentTimeMillis() - time) / 1000));
+					//System.out.format("%11d %11d %11d", minValidationError, mediumValidationError, trainingError); ta errado
+					System.out.println(minValidationError[0]+"\t\t"+mediumValidationError+"\t\t"+trainingError);
 				}
 			}
 		});

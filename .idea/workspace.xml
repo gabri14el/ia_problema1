@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="93a37fb8-6135-40ab-8abe-81b0121866bb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/files/input_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/files/input_test.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/input_trainning.csv" beforeDir="false" afterPath="$PROJECT_DIR$/files/input_trainning.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/input_validation.csv" beforeDir="false" afterPath="$PROJECT_DIR$/files/input_validation.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -23,8 +19,8 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="51" column="32" lean-forward="true" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="32" />
+            <state relative-caret-position="137">
+              <caret line="180" column="14" selection-start-line="180" selection-start-column="14" selection-end-line="180" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -60,8 +56,18 @@
       <file leaf-file-name="BagOfWords.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="975">
-              <caret line="161" lean-forward="true" selection-start-line="161" selection-end-line="161" />
+            <state relative-caret-position="-945">
+              <caret line="28" column="56" selection-start-line="28" selection-start-column="56" selection-end-line="28" selection-end-column="56" />
+              <folding>
+                <element signature="e#1547#1548#0" expanded="true" />
+                <element signature="e#1570#1571#0" expanded="true" />
+                <element signature="e#1607#1608#0" expanded="true" />
+                <element signature="e#1628#1629#0" expanded="true" />
+                <element signature="e#5305#5306#0" expanded="true" />
+                <element signature="e#5337#5338#0" expanded="true" />
+                <element signature="e#5377#5378#0" expanded="true" />
+                <element signature="e#5402#5403#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -345,7 +351,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5090909" side_tool="true" weight="0.4437086" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32890365" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4909091" visible="true" weight="0.12006861" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4909091" visible="true" weight="0.2761578" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4969697" weight="0.32890365" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -376,7 +382,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java</url>
-          <line>142</line>
+          <line>216</line>
           <properties />
         </line-breakpoint>
       </breakpoints>
@@ -408,6 +414,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1665">
           <caret line="122" column="41" lean-forward="true" selection-start-line="122" selection-start-column="41" selection-end-line="122" selection-end-column="41" />
+          <folding>
+            <element signature="e#1547#1548#0" expanded="true" />
+            <element signature="e#1570#1571#0" expanded="true" />
+            <element signature="e#1607#1608#0" expanded="true" />
+            <element signature="e#1628#1629#0" expanded="true" />
+            <element signature="e#5305#5306#0" expanded="true" />
+            <element signature="e#5337#5338#0" expanded="true" />
+            <element signature="e#5377#5378#0" expanded="true" />
+            <element signature="e#5402#5403#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -578,6 +594,20 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/core/events/LearningEvent.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/nnet/MultiLayerPerceptron.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/core/NeuralNetwork.class" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1335">
+          <caret line="112" column="45" selection-start-line="112" selection-start-column="45" selection-end-line="112" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/nnet/learning/BackPropagation.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/util/Random.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="761">
@@ -602,31 +632,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="112" column="45" selection-start-line="112" selection-start-column="45" selection-end-line="112" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="161" lean-forward="true" selection-start-line="161" selection-end-line="161" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/nnet/learning/BackPropagation.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="27" column="39" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+        <state relative-caret-position="-945">
+          <caret line="28" column="56" selection-start-line="28" selection-start-column="56" selection-end-line="28" selection-end-column="56" />
+          <folding>
+            <element signature="e#1547#1548#0" expanded="true" />
+            <element signature="e#1570#1571#0" expanded="true" />
+            <element signature="e#1607#1608#0" expanded="true" />
+            <element signature="e#1628#1629#0" expanded="true" />
+            <element signature="e#5305#5306#0" expanded="true" />
+            <element signature="e#5337#5338#0" expanded="true" />
+            <element signature="e#5377#5378#0" expanded="true" />
+            <element signature="e#5402#5403#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="51" column="32" lean-forward="true" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="32" />
+        <state relative-caret-position="137">
+          <caret line="180" column="14" selection-start-line="180" selection-start-column="14" selection-end-line="180" selection-end-column="14" />
         </state>
       </provider>
     </entry>
