@@ -38,14 +38,13 @@ public class App {
 		List<Review> test = load(INPUT_TEST_FILE);
 		List<Review> validation = load(INPUT_VALIDATION_FILE);
 		List<Review> trainning = load(INPUT_TRAINNING_FILE);
-
 		List<String> stopWords = loadStopWords();
 
 		BagOfWords bow = createBOW(stopWords, trainning);
 		createVecReviews(trainning, bow);
 
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
-		//trainingNeuralNetwork(neuralNetwork, reviews, 0.3); //TODO substituir por trainingReviews
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3); //TODO substituir por trainingReviews
 	}
 
 	private static List<Review> load(String fileName) throws IOException {

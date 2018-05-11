@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="93a37fb8-6135-40ab-8abe-81b0121866bb" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -18,8 +19,8 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="46" column="110" selection-start-line="46" selection-start-column="110" selection-end-line="46" selection-end-column="110" />
+            <state relative-caret-position="120">
+              <caret line="43" column="41" selection-start-line="43" selection-start-column="41" selection-end-line="43" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -40,8 +41,8 @@
       <file leaf-file-name="Review.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/model/Review.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="46" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
+            <state relative-caret-position="-375">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
               <folding>
                 <element signature="e#772#773#0" expanded="true" />
                 <element signature="e#792#793#0" expanded="true" />
@@ -64,7 +65,7 @@
       <file leaf-file-name="InputGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1470">
+            <state relative-caret-position="498">
               <caret line="112" column="45" selection-start-line="112" selection-start-column="45" selection-end-line="112" selection-end-column="45" />
             </state>
           </provider>
@@ -333,26 +334,26 @@
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.4969697" weight="0.3294702" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5090909" side_tool="true" weight="0.4437086" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32890365" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4909091" weight="0.37873754" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4909091" weight="0.3773585" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4969697" weight="0.32890365" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2920937" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2920937" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39965695" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.4969697" weight="0.3294702" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -365,6 +366,18 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java</url>
+          <line>141</line>
+          <properties />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="1" />
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
@@ -561,30 +574,10 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/core/events/LearningEvent.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/nnet/MultiLayerPerceptron.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/neuroph/neuroph-core/2.94/neuroph-core-2.94.jar!/org/neuroph/core/NeuralNetwork.class" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1470">
-          <caret line="112" column="45" selection-start-line="112" selection-start-column="45" selection-end-line="112" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/util/BagOfWords.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1665">
           <caret line="122" column="41" selection-start-line="122" selection-start-column="41" selection-end-line="122" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/model/Review.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="46" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
-          <folding>
-            <element signature="e#772#773#0" expanded="true" />
-            <element signature="e#792#793#0" expanded="true" />
-            <element signature="e#835#836#0" expanded="true" />
-            <element signature="e#862#863#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -599,10 +592,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/InputGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="112" column="45" selection-start-line="112" selection-start-column="45" selection-end-line="112" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/model/Review.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-375">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding>
+            <element signature="e#772#773#0" expanded="true" />
+            <element signature="e#792#793#0" expanded="true" />
+            <element signature="e#835#836#0" expanded="true" />
+            <element signature="e#862#863#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uefs/ecomp/ia/sentiment_analysis/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="46" column="110" selection-start-line="46" selection-start-column="110" selection-end-line="46" selection-end-column="110" />
+        <state relative-caret-position="120">
+          <caret line="43" column="41" selection-start-line="43" selection-start-column="41" selection-end-line="43" selection-end-column="41" />
         </state>
       </provider>
     </entry>
