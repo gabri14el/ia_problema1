@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -35,20 +34,30 @@ public class App {
 	private static final double POSITIVE_WEIGHT = 0.99;
 
 
-
 	public static void main(String[] args) throws IOException {
+		List<Review> test = load(INPUT_TEST_FILE);
+		List<Review> validation = load(INPUT_VALIDATION_FILE);
+		List<Review> trainning = load(INPUT_TRAINNING_FILE);
 
 		List<String> stopWords = loadStopWords();
-		List<Review> reviews = loadReviews();
-		List<Review> test;
-		List<Review> validation;
-		List<Review> trainning;
 
-		//BagOfWords bow = createBOW(stopWords, reviews);
-		//createVecReviews(reviews, bow);
+		BagOfWords bow = createBOW(stopWords, trainning);
+		createVecReviews(trainning, bow);
 
-		//NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
+		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, (bow.getVocabullarySize()) / 2);
 		//trainingNeuralNetwork(neuralNetwork, reviews, 0.3); //TODO substituir por trainingReviews
+	}
+
+	private static List<Review> load(String fileName) throws IOException {
+		List<Review> reviews = new LinkedList<>();
+		String[] line;
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"))) {
+			while (reader.ready()) {
+				line = reader.readLine().split(";");
+				reviews.add(new Review(Integer.parseInt(line[0]), line[1], line[2]));
+			}
+		}
+		return reviews;
 	}
 
 	/**
@@ -97,8 +106,8 @@ public class App {
 	 * @param trainReviews
 	 */
 	private static void trainingNeuralNetwork(NeuralNetwork neuralNetwork, List<Review> trainReviews, List<Review> validationReviews, double learningRate) {
-		Double[][] bestWeights = new Double[][]{{}};
-		double[] minValidationError = new double[]{-1};
+		Double[][] bestWeights = new Double[][] { {} };
+		double[] minValidationError = new double[] { -1 };
 		List<ErrorData> errors = new LinkedList<>();
 		//criando dataset de treinamento, entrada do tamanho do vacabulario e saída 1
 		DataSet traingSet = List2DataSet(trainReviews, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
@@ -175,17 +184,6 @@ public class App {
 		return stopWords;
 	}
 
-	private static List<Review> loadReviews() throws IOException {
-		List<Review> reviews = new LinkedList<>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(INPUT_TRAINNING_FILE), "UTF-8"))) {
-			reader.lines().forEach((l) -> {
-				String[] line = l.split(";");
-				reviews.add(new Review(Integer.parseInt(line[0]), line[1], line[2]));
-			});
-		}
-		return reviews;
-	}
-
 	private static BagOfWords createBOW(List<String> stopWords, List<Review> reviews) {
 		BagOfWords bow = new BagOfWords();
 		bow.setStopWords(stopWords);
@@ -203,7 +201,6 @@ public class App {
 			r.setVector(vec);
 		}
 	}
-
 
 	/**
 	 * Métodos responsável por colocar pesos aleatórios nos neurônios.
