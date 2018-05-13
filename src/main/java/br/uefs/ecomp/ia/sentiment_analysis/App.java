@@ -1,9 +1,6 @@
 package br.uefs.ecomp.ia.sentiment_analysis;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -54,74 +51,38 @@ public class App {
 		createVecReviews(trainning, bow);
 
 		System.out.println("tamanho do vocabulario: "+bow.getVocabullarySize()); //deixa essa porra aí
+		System.out.println("tamanho da validacao: "+validation.size());
+		System.out.println("tamanho do teste: "+test.size());
+		System.out.println("tamanho do treino: " +trainning.size());
 
 		System.out.println("###################################  TREINAMENTO 1  ###################################");
-		int hiddenLayerSize = bow.getVocabullarySize();
+		int hiddenLayerSize = 50;
 		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
 		System.out.println("treinamento dynamic backpropagation");
 		NeuralNetwork neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.05,
-				0.05, 100, 0.9, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
+		initializeNeurons(neuralNetwork);
+		Double[] pesos = neuralNetwork.getWeights();
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.01,
+				0.05, 200, 0.9, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
 		double[][] resultado = testNeuralNetwork(test, neuralNetwork);
 		printResults(resultado);
 
 
-		System.out.println("\n\n");
-		System.out.println("###################################  TREINAMENTO 2  ###################################");
-		System.out.println("treinamento backpropagation");
-		hiddenLayerSize = bow.getVocabullarySize();
-		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
-		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.05,
-				0.05, 100, 0.9, BACKPROPAGATION); //TODO substituir por trainingReviews
-		resultado = testNeuralNetwork(test, neuralNetwork);
-		printResults(resultado);
+
 
 		System.out.println("\n\n");
-		System.out.println("###################################  TREINAMENTO 3  ###################################");
-		hiddenLayerSize = 1000;
+		System.out.println("###################################  TREINAMENTO 7  ###################################");
+		hiddenLayerSize = 50;
 		System.out.println("treinamento dynamic backpropagation");
 		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
 		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.5, 0.05,
-				0.07, 100, 0.7, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
+		neuralNetwork.setWeights(DoubleVectorToPrimitive(pesos));
+		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.3, 0.01,
+				0.05, 200, 0.9, BACKPROPAGATION); //TODO substituir por trainingReviews
 		resultado = testNeuralNetwork(test, neuralNetwork);
 		printResults(resultado);
 
-		System.out.println("\n\n");
-		System.out.println("###################################  TREINAMENTO 4  ###################################");
-		hiddenLayerSize = 1000;
-		System.out.println("treinamento backpropagation");
-		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
-		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,0.5, 0.05,
-				0.07, 100, 0.7, BACKPROPAGATION); //TODO substituir por trainingReviews
-		resultado = testNeuralNetwork(test, neuralNetwork);
-		printResults(resultado);
-
-		System.out.println("\n\n");
-		System.out.println("###################################  TREINAMENTO 5  ###################################");
-		hiddenLayerSize = bow.getVocabullarySize();
-		System.out.println("treinamento dynamic backpropagation");
-		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
-		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,1, 0.01,
-				0.1, 100, 0.9, DYNAMIC_MOMENTUM_BACKPROPAGATION); //TODO substituir por trainingReviews
-		resultado = testNeuralNetwork(test, neuralNetwork);
-		printResults(resultado);
-
-		System.out.println("\n\n");
-		System.out.println("###################################  TREINAMENTO 6  ###################################");
-		hiddenLayerSize = bow.getVocabullarySize();
-		System.out.println("treinamento backpropagation");
-		System.out.println("quantidade de neuronios da camada oculta: "+hiddenLayerSize);
-		neuralNetwork = createSimpleMultilayerPerceptronNN(bow, hiddenLayerSize);
-		trainingNeuralNetwork(neuralNetwork, trainning, validation,1, 0.01,
-				0.1, 100, 0.9, BACKPROPAGATION); //TODO substituir por trainingReviews
-		resultado = testNeuralNetwork(test, neuralNetwork);
-		printResults(resultado);
 	}
-
 
 	/**
 	 * Método para imprimir resultados
@@ -131,15 +92,15 @@ public class App {
 		System.out.println("==================RESULTADOS==================");
 		System.out.println("esperado\tobtido");
 		int acertos = 0;
-		for(int i=0; i<results.length; i++){
-			System.out.println(results[0][i]+"\t"+results[1][i]);
+		for(int i=0; i<results[0].length; i++){
+			//System.out.println(results[0][i]+"\t"+results[1][i]);
 			if((results[0][i]> 0.5 && results[1][i]>0.5) || (results[0][i]<= 0.5 && results[1][i]<=0.5))
 				acertos++;
 		}
 		System.out.println("----------------------");
-		System.out.println("total de comentarios: "+results.length);
+		System.out.println("total de comentarios: "+results[0].length);
 		System.out.println("total de acertos: "+acertos);
-		System.out.println("porcentagem de acerto: "+(acertos/results.length)*100);
+		//System.out.println("porcentagem de acerto: "+(acertos/results[0].length)*100);
 		System.out.println("----------------------");
 	}
 	private static List<Review> load(String fileName) throws IOException {
@@ -210,7 +171,7 @@ public class App {
 				neuralNetwork.getOutputsCount());
 
 		System.out.println("sorteando pesos iniciais dos neuronios...");
-		initializeNeurons(neuralNetwork);
+		//initializeNeurons(neuralNetwork);
 
 		System.out.println("iniciando treinamento da rede neural...");
 		System.out.println("taxa de aprendizado maxima: "+maxLearningRate);
@@ -237,13 +198,20 @@ public class App {
 			backPropagation.setMaxIterations(maxEpoch); //quantidade maxima de epocas
 			backPropagation.setMaxError(maxError); //erro maximo permitido para parar o treinamento
 			backPropagation.setLearningRate(maxLearningRate);//taxa de aprendizado
-			backPropagation.setBatchMode(true);
+			//backPropagation.setBatchMode(true);
 		}
 		else{
 			backPropagation = new ResilientPropagation();
 			((ResilientPropagation)backPropagation).setMaxIterations(maxEpoch); //quantidade maxima de epocas
 			//((ResilientPropagation)backPropagation).setMaxError(maxError); //erro maximo permitido para parar o treinamento
 			//((ResilientPropagation)backPropagation).setLearningRate(maxLearningRate);//taxa de aprendizado
+			((ResilientPropagation)backPropagation).setInitialDelta(0.1);
+			((ResilientPropagation)backPropagation).setMaxDelta(50);
+			((ResilientPropagation)backPropagation).setMinDelta(0.000001);
+			((ResilientPropagation)backPropagation).setIncreaseFactor(0.5);
+			((ResilientPropagation)backPropagation).setDecreaseFactor(1.2);
+
+
 		}
 
 
@@ -374,8 +342,10 @@ public class App {
 
 	private static double[][] testNeuralNetwork(List<Review> test, NeuralNetwork neuralNetwork){
 		DataSet testSet = List2DataSet(test, neuralNetwork.getInputsCount(), neuralNetwork.getOutputsCount());
-		double[][] resultados = new double[2][testSet.size()];
-		for (int i = 0; i < testSet.size(); i++) {
+
+		System.out.println("\n\niniciando os testes...");
+		double[][] resultados = new double[2][testSet.getRows().size()];
+		for (int i = 0; i < testSet.getRows().size(); i++) {
 			neuralNetwork.setInput(testSet.get(i).getInput());
 			neuralNetwork.calculate();
 			double desejado = testSet.get(i).getDesiredOutput()[0];
